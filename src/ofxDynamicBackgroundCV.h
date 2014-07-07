@@ -18,8 +18,11 @@ public:
     cv::Mat backgroundOutputMat;
     ofImage backgroundOutputImage;
     
+    
+    ofImage& getImageRef();
     double alpha;
 
+    void drawDebug(float scale);
 };
 
 
