@@ -1,7 +1,5 @@
 #include "ofxDynamicBackgroundCV.h"
 
-using namespace ofxCv;
-using namespace cv;
 
 ofxDynamicBackgroundCV::ofxDynamicBackgroundCV()
 {
@@ -11,7 +9,7 @@ ofxDynamicBackgroundCV::ofxDynamicBackgroundCV()
 
 void ofxDynamicBackgroundCV::update(ofBaseHasPixels& sourcePixels)
 {
-    frameMat = toCv(sourcePixels);
+    frameMat = ofxCv::toCv(sourcePixels);
     
     if(accumulatorMat.empty())
     {
@@ -26,8 +24,44 @@ void ofxDynamicBackgroundCV::update(ofBaseHasPixels& sourcePixels)
 
 void ofxDynamicBackgroundCV::draw(int x=0, int y=0)
 {
-    toOf(backgroundOutputMat, backgroundOutputImage);
+    getImageRef().draw(x, y);
+}
+
+
+ofImage& ofxDynamicBackgroundCV::getImageRef()
+{
+    ofxCv::toOf(backgroundOutputMat, backgroundOutputImage);
     backgroundOutputImage.update();
-    backgroundOutputImage.draw(x, y);
+    return backgroundOutputImage;
+}
+
+
+void ofxDynamicBackgroundCV::drawDebug(float scale=1.0)
+{
+    float scaledWidth = frameMat.size().width*scale;
+    float scaledHeight = frameMat.size().height*scale;
+    ofColor color1 = ofColor::black;
+    ofColor color2 = ofColor::yellow;
     
+    ofxCv::drawMat(frameMat, 0, 0, scaledWidth, scaledHeight);
+    ofDrawBitmapStringHighlight("frameMat", 0, 20, color1, color2);
+    
+    ofPushMatrix();
+        ofTranslate(0, scaledHeight);
+            ofxCv::drawMat(backgroundOutputMat, 0, 0, scaledWidth, scaledHeight);
+            ofDrawBitmapStringHighlight("backgroundOutputMat", 0, 20, color1, color2);
+    ofPopMatrix();
+
+    ofPushMatrix();
+        ofTranslate(scaledWidth, 0);
+            ofxCv::drawMat(accumulatorMat, 0, 0, scaledWidth, scaledHeight);
+            ofDrawBitmapStringHighlight("accumulatorMat", 0, 20, color1, color2);
+    ofPopMatrix();
+    return;
+    
+    ofPushMatrix();
+        ofTranslate(scaledWidth, scaledHeight);
+            getImageRef().draw(0, 0, scaledWidth,scaledHeight);
+            ofDrawBitmapStringHighlight("backgroundOutputImage", 0, 20, color1, color2);
+    ofPopMatrix();
 }
