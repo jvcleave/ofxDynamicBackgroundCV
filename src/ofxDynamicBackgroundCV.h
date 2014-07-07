@@ -11,7 +11,7 @@ public:
     ofxDynamicBackgroundCV();
     
 	void update(ofBaseHasPixels& sourcePixels);
-    void draw(int x, int y);
+    void draw(int x=0, int y=0);
     
 	cv::Mat accumulatorMat;
     cv::Mat frameMat;
@@ -22,7 +22,7 @@ public:
     ofImage& getImageRef();
     double alpha;
 
-    void drawDebug(float scale);
+    void drawDebug(float scale=1.0);
 };
 
 

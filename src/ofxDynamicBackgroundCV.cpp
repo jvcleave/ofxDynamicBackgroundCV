@@ -22,7 +22,7 @@ void ofxDynamicBackgroundCV::update(ofBaseHasPixels& sourcePixels)
 }
 
 
-void ofxDynamicBackgroundCV::draw(int x=0, int y=0)
+void ofxDynamicBackgroundCV::draw(int x, int y) //default:0,0
 {
     getImageRef().draw(x, y);
 }
@@ -36,7 +36,7 @@ ofImage& ofxDynamicBackgroundCV::getImageRef()
 }
 
 
-void ofxDynamicBackgroundCV::drawDebug(float scale=1.0)
+void ofxDynamicBackgroundCV::drawDebug(float scale) //default:1.0
 {
     float scaledWidth = frameMat.size().width*scale;
     float scaledHeight = frameMat.size().height*scale;
